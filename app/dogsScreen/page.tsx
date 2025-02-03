@@ -45,9 +45,6 @@ export default function dogsScreen() {
             credentials: "include"
         });
         router.push("/");
-        if (response.status === 200) {
-
-        }
     }
 
     useEffect(() => {
