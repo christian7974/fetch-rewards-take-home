@@ -4,4 +4,10 @@ const nextConfig: NextConfig = {
   /* config options here */
 };
 
+module.exports = {
+    env: {
+        BASE_URL: process.env.BASE_URL,
+    }
+}
+
 export default nextConfig;
