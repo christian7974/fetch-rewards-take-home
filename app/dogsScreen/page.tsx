@@ -20,6 +20,9 @@ export default function dogsScreen() {
     // list of dogs that resulted from the query (dogSearchResults.resultIds)
     const [dogs, setDogs] = useState<Dog[]>([]);
 
+    // array containing user's favorited dogs
+    const [favoritedDogs, updateFavoritedDogs] = useState<Dog[]>([]);
+
     // object that holds search queries object
     const [searchQueries, updateSearchQueries] = useState<searchParameters>({});
 
@@ -82,7 +85,6 @@ export default function dogsScreen() {
             const params = new URLSearchParams(searchParams as any);
             const baseURL = `${process.env.BASE_URL}/dogs/search`;
             const url = `${baseURL}?${params.toString()}`;
-            console.log(url);
             try {
                 const response = await fetch(url, {
                     method: "GET",
@@ -110,7 +112,6 @@ export default function dogsScreen() {
          * @param dogIdArray array of dog ids from the search
          */
         async function fetchDogs(dogIdArray: string[]) {
-            console.log(dogSearchResults?.next);
             try {
                 const response = await fetch(`${process.env.BASE_URL}/dogs`, {
                     method: "POST",
@@ -146,7 +147,7 @@ export default function dogsScreen() {
         const sortDataGroup = formData.get('sort_by') as string;
         const sortOrder = formData.get('sort_order') as string;
         var sortString = "";
-        if (sortDataGroup && sortOrder) { 
+        if (sortDataGroup && sortOrder) {
             sortString = `${sortDataGroup}:${sortOrder}`;
         }
 
@@ -160,7 +161,6 @@ export default function dogsScreen() {
         const size = parseInt(formData.get('numReturn') as string);
         const searchParams: searchParameters = {};
         searchParams.from = fromPointer;
-        console.log("from poitner at start of search", fromPointer);
         if (ageMin !== undefined) {
             searchParams.ageMin = ageMin;
         }
@@ -170,7 +170,7 @@ export default function dogsScreen() {
         if (size !== undefined) {
             searchParams.size = size;
         }
-        if (breedsList.length > 0) { 
+        if (breedsList.length > 0) {
             searchParams.breeds = breedsList;
         }
         if (sortString !== "") {
@@ -185,17 +185,32 @@ export default function dogsScreen() {
     function handleNextPageClick() {
         updateFromPointer(prevFromPointer => {
             const newFromPointer = prevFromPointer + PAGE_SIZE;
-            updateSearchQueries({...searchQueries, from: newFromPointer});
+            updateSearchQueries({ ...searchQueries, from: newFromPointer });
             return newFromPointer;
-        });        
+        });
     }
 
     function handlePrevPageClick() {
-        updateFromPointer(prevFromPointer => {
-            const newFromPointer = prevFromPointer - PAGE_SIZE;
-            updateSearchQueries({...searchQueries, from: newFromPointer});
-            return newFromPointer;
-        });
+        if (fromPointer != 0) {
+            updateFromPointer(prevFromPointer => {
+                const newFromPointer = prevFromPointer - PAGE_SIZE;
+                updateSearchQueries({ ...searchQueries, from: newFromPointer });
+                return newFromPointer;
+            });
+        }
+    }
+
+    function handleDogClick(selectedDog: Dog) {
+        var newFavoritedList = [];
+        if (favoritedDogs.includes(selectedDog)) {
+            newFavoritedList = favoritedDogs.filter((dog) => dog !== selectedDog);
+            updateFavoritedDogs(newFavoritedList);
+            return;
+        }
+        /**
+         * add dog to favorites array
+        */
+        updateFavoritedDogs([...favoritedDogs, selectedDog]);
     }
 
     return (
@@ -235,12 +250,12 @@ export default function dogsScreen() {
                         {/* amount of results (size) */}
                         <label className="text-black">Results to Return: {numDogsToReturn}</label>
                         <input type="range" min={1} max={PAGE_SIZE} id="numReturn" name="numReturn" value={numDogsToReturn} onChange={(e) => updateNumDogsToReturn(parseInt(e.target.value))}></input>
-                        
+
                         {/* from (paginating results [optional]) */}
 
                         {/* choose to sort by breed, name or age */}
                         <div >
-                        <p>Sort by:</p>
+                            <p>Sort by:</p>
                             <div className="grid grid-cols-2">
                                 <label>Breed</label>
                                 <input type="radio" name="sort_by" value="breed"></input>
@@ -261,10 +276,20 @@ export default function dogsScreen() {
                         <button type="submit" className="text-black">find dog</button>
                     </form>
                 </div>
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-4 gap-4 bg-green-200">
                     {dogs.map((dog) => {
                         return (
-                            <div key={dog.id}>
+                            <div key={dog.id} onClick={() => handleDogClick(dog)}>
+                                <IndividualDog {...dog} />
+                            </div>
+                        )
+                    })}
+                </div>
+
+                <div className="grid grid-cols-4 gap-4 bg-purple-200">
+                    {favoritedDogs.map((dog) => {
+                        return (
+                            <div key={dog.id} onClick={() => handleDogClick(dog)}>
                                 <IndividualDog {...dog} />
                             </div>
                         )
