@@ -28,6 +28,8 @@ export default function Home() {
 
         if (response.status === 200) {
             router.push("/dogsScreen");
+        } else {
+            setErrorMessage("Something went wrong");
         }
 
     }
