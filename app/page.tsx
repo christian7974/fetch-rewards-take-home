@@ -26,7 +26,9 @@ export default function Home() {
             credentials: "include"
         });
 
-        setErrorMessage(`${response.status}`);
+        if (response.status === 200) {
+            router.push("/dogsScreen");
+        }
 
     }
 
