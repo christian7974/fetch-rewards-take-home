@@ -17,6 +17,10 @@ export default function dogsScreen() {
     // list of dogs that resulted from the query (dogSearchResults.resultIds)
     const [dogs, setDogs] = useState<Dog[]>([]);
 
+    // object that holds search queries object
+    const [searchQueries, updateSearchQueries] = useState<searchParameters>({});
+    const [numDogsToReturn, updateNumDogsToReturn] = useState(25);
+
     /**
      * Function to log the user out of the app
      * 
@@ -30,7 +34,7 @@ export default function dogsScreen() {
         });
         router.push("/");
         if (response.status === 200) {
-            
+
         }
     }
 
@@ -43,20 +47,20 @@ export default function dogsScreen() {
                 method: "GET",
                 credentials: "include"
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
 
                 setDogBreeds(data);
-                
-                
+
+
             } else {
                 console.error("Failed to fetch breeds");
             }
         }
-    
+
         fetchBreeds();
-        
+
     }, []);
 
     // get the object from the dogs/search endpoint
@@ -64,19 +68,19 @@ export default function dogsScreen() {
         /**
          * Function that fetches the dog search results (stored as a QueryResult object)
          */
-        async function fetchDogsSearch() {
+        async function fetchDogsSearch(searchParams: searchParameters) {
+            console.log("this ran");
             // add the parameters to the search results here
-            const params = new URLSearchParams({
-                
-            });
+            const params = new URLSearchParams(searchParams as any);
             const baseURL = `${process.env.BASE_URL}/dogs/search`;
             const url = `${baseURL}?${params.toString()}`;
+            console.log(url);
             try {
                 const response = await fetch(url, {
                     method: "GET",
                     credentials: "include",
                 });
-    
+
                 if (response.ok) {
                     const data = await response.json();
                     updateDogSearchResults(data);
@@ -87,9 +91,9 @@ export default function dogsScreen() {
                 console.error("Error fetching breeds:", error);
             }
         }
-    
-        fetchDogsSearch();
-    }, []);
+
+        fetchDogsSearch(searchQueries);
+    }, [searchQueries]);
 
     // using the dog ids, actually get the dogs
     useEffect(() => {
@@ -108,7 +112,7 @@ export default function dogsScreen() {
                     // body is the array of dog ids from the search
                     body: JSON.stringify(dogIdArray),
                 });
-    
+
                 if (response.ok) {
                     console.log("the dogs");
                     const data = await response.json();
@@ -127,7 +131,49 @@ export default function dogsScreen() {
         }
     }, [dogSearchResults]);
 
+    function handleNewSearch(event: any) {
+        console.log("new search");
+        event.preventDefault();
+        const formData = new FormData(event.target as HTMLFormElement);
 
+        const sortDataGroup = formData.get('sort_by') as string;
+        const sortOrder = formData.get('sort_order') as string;
+        var sortString = "";
+        if (sortDataGroup && sortOrder) { 
+            sortString = `${sortDataGroup}:${sortOrder}`;
+        }
+
+        const ageMin = formData.get('ageMin') ? parseInt(formData.get('ageMin') as string) : undefined;
+        const ageMax = formData.get('ageMax') ? parseInt(formData.get('ageMax') as string) : undefined;
+
+        const zipCodesList = formData.get('zipCodes') as string;
+        const zipCodes = zipCodesList ? zipCodesList.split('\n') : [];
+
+        const breedsList = formData.getAll('breed') as string[];
+        const size = parseInt(formData.get('numReturn') as string);
+        const searchParams: searchParameters = {};
+
+        if (ageMin !== undefined) {
+            searchParams.ageMin = ageMin;
+        }
+        if (ageMax !== undefined) {
+            searchParams.ageMax = ageMax;
+        }
+        if (size !== undefined) {
+            searchParams.size = size;
+        }
+        if (breedsList.length > 0) { 
+            searchParams.breeds = breedsList;
+        }
+        if (sortString !== "") {
+            searchParams.sort = sortString;
+        }
+        if (zipCodes.length > 0) {
+            searchParams.zipCodes = zipCodes;
+        }
+        console.log(searchParams);
+        updateSearchQueries(searchParams);
+    }
     return (
         <div className="items-center justify-items-center min-h-screen p-8 pb-20">
             <main className="items-center justify-items-center">
@@ -135,7 +181,59 @@ export default function dogsScreen() {
                 <form onSubmit={handleLogOut}>
                     <button type="submit">log out</button>
                 </form>
-                <p>{errorMessage}</p>
+                <div className="bg-blue-400">
+                    <form onSubmit={handleNewSearch} className="grid grid-cols-2 gap-4">
+                        {/* multiple breeds */}
+                        <label className="text-black">Select Breed</label>
+                        <select className="text-black" name="breed" id="breed" multiple>
+                            {dogBreeds.map((breed) => {
+                                return (
+                                    <option key={breed}>{breed}</option>
+                                )
+                            })}
+                        </select>
+
+                        {/* multiple zipCodes */}
+                        <label>Zip Codes (Enter zip codes on their own lines)</label>
+                        <textarea className="text-black" name="zipCodes" id="zipCodes"></textarea>
+
+                        {/* ageMin */}
+                        <label className="text-black">Min Age</label>
+                        <input className="text-black" id="ageMin" name="ageMin"></input>
+
+                        {/* ageMax */}
+                        <label className="text-black">Max Age</label>
+                        <input className="text-black" id="ageMax" name="ageMax"></input>
+
+                        {/* amount of results (size) */}
+                        <label className="text-black">Results to Return: {numDogsToReturn}</label>
+                        <input type="range" min={1} max={25} id="numReturn" name="numReturn" value={numDogsToReturn} onChange={(e) => updateNumDogsToReturn(parseInt(e.target.value))}></input>
+                        
+                        {/* from (paginating results [optional]) */}
+
+                        {/* choose to sort by breed, name or age */}
+                        <div >
+                        <p>Sort by:</p>
+                            <div className="grid grid-cols-2">
+                                <label>Breed</label>
+                                <input type="radio" name="sort_by" value="breed"></input>
+
+                                <label>Name</label>
+                                <input type="radio" name="sort_by" value="name"></input>
+
+                                <label>Age</label>
+                                <input type="radio" name="sort_by" value="age"></input>
+
+                                <label>Ascending Order</label>
+                                <input type="radio" name="sort_order" value="asc"></input>
+
+                                <label>Descending Order</label>
+                                <input type="radio" name="sort_order" value="desc"></input>
+                            </div>
+                        </div>
+                        <button type="submit" className="text-black">find dog</button>
+                    </form>
+                </div>
                 <div className="grid grid-cols-4 gap-4">
                     {dogs.map((dog) => {
                         return (
@@ -150,5 +248,5 @@ export default function dogsScreen() {
 
             </footer>
         </div>
-    ); 
+    );
 }
