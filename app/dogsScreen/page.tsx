@@ -23,6 +23,9 @@ export default function dogsScreen() {
     // array containing user's favorited dogs
     const [favoritedDogs, updateFavoritedDogs] = useState<Dog[]>([]);
 
+    // dog that the user matches with
+    const [matchedDog, updateMatchedDog] = useState<Dog>();
+
     // object that holds search queries object
     const [searchQueries, updateSearchQueries] = useState<searchParameters>({});
 
@@ -213,6 +216,34 @@ export default function dogsScreen() {
         updateFavoritedDogs([...favoritedDogs, selectedDog]);
     }
 
+    async function handleFavoritedClick() {
+        const favoritedDogIds = favoritedDogs.map((dog) => dog.id);
+        const matchedDogResponse = await fetch(`${process.env.BASE_URL}/dogs/match`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(favoritedDogIds),
+        });
+        if (matchedDogResponse.ok) {
+            const matchedDogId = await matchedDogResponse.json();
+            const response = await fetch(`${process.env.BASE_URL}/dogs`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                // body is the array of dog ids from the search
+                body: JSON.stringify([matchedDogId.match]),
+            });
+            if (response.ok) {
+                const favoritedDog = await response.json();
+                updateMatchedDog(favoritedDog[0]);
+            }
+        }
+    }
+
     return (
         <div className="items-center justify-items-center min-h-screen p-8 pb-20">
             <main className="items-center justify-items-center">
@@ -295,6 +326,10 @@ export default function dogsScreen() {
                         )
                     })}
                 </div>
+                {favoritedDogs.length > 0 && <button onClick={() => handleFavoritedClick()}>Get Match</button>}
+                
+                    {matchedDog && <IndividualDog {...matchedDog} />}
+                
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
 
