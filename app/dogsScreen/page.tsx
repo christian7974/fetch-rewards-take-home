@@ -5,6 +5,9 @@ import IndividualDog from "../components/IndividualDog";
 
 export default function dogsScreen() {
 
+    // Const value to represent the maximum number of dogs to be shown
+    const PAGE_SIZE = 12;
+
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -19,7 +22,10 @@ export default function dogsScreen() {
 
     // object that holds search queries object
     const [searchQueries, updateSearchQueries] = useState<searchParameters>({});
-    const [numDogsToReturn, updateNumDogsToReturn] = useState(25);
+
+    const [numDogsToReturn, updateNumDogsToReturn] = useState(PAGE_SIZE);
+
+    const [fromPointer, updateFromPointer] = useState(0);
 
     /**
      * Function to log the user out of the app
@@ -69,8 +75,10 @@ export default function dogsScreen() {
          * Function that fetches the dog search results (stored as a QueryResult object)
          */
         async function fetchDogsSearch(searchParams: searchParameters) {
-            console.log("this ran");
             // add the parameters to the search results here
+            if (searchParams.size === undefined) {
+                searchParams.size = PAGE_SIZE;
+            }
             const params = new URLSearchParams(searchParams as any);
             const baseURL = `${process.env.BASE_URL}/dogs/search`;
             const url = `${baseURL}?${params.toString()}`;
@@ -102,6 +110,7 @@ export default function dogsScreen() {
          * @param dogIdArray array of dog ids from the search
          */
         async function fetchDogs(dogIdArray: string[]) {
+            console.log(dogSearchResults?.next);
             try {
                 const response = await fetch(`${process.env.BASE_URL}/dogs`, {
                     method: "POST",
@@ -114,7 +123,6 @@ export default function dogsScreen() {
                 });
 
                 if (response.ok) {
-                    console.log("the dogs");
                     const data = await response.json();
                     const sortedDogs = data.sort((a: Dog, b: Dog) => a.breed.localeCompare(b.breed));
                     setDogs(sortedDogs);
@@ -129,13 +137,12 @@ export default function dogsScreen() {
             // pass in ONLY the dog ids from the QueryResult object
             fetchDogs(dogSearchResults.resultIds);
         }
-    }, [dogSearchResults]);
+    }, [dogSearchResults?.resultIds]);
 
     function handleNewSearch(event: any) {
-        console.log("new search");
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
-
+        updateFromPointer(0); // when we do a new search, reset the from pointer
         const sortDataGroup = formData.get('sort_by') as string;
         const sortOrder = formData.get('sort_order') as string;
         var sortString = "";
@@ -152,7 +159,8 @@ export default function dogsScreen() {
         const breedsList = formData.getAll('breed') as string[];
         const size = parseInt(formData.get('numReturn') as string);
         const searchParams: searchParameters = {};
-
+        searchParams.from = fromPointer;
+        console.log("from poitner at start of search", fromPointer);
         if (ageMin !== undefined) {
             searchParams.ageMin = ageMin;
         }
@@ -171,16 +179,35 @@ export default function dogsScreen() {
         if (zipCodes.length > 0) {
             searchParams.zipCodes = zipCodes;
         }
-        console.log(searchParams);
         updateSearchQueries(searchParams);
     }
+
+    function handleNextPageClick() {
+        updateFromPointer(prevFromPointer => {
+            const newFromPointer = prevFromPointer + PAGE_SIZE;
+            updateSearchQueries({...searchQueries, from: newFromPointer});
+            return newFromPointer;
+        });        
+    }
+
+    function handlePrevPageClick() {
+        updateFromPointer(prevFromPointer => {
+            const newFromPointer = prevFromPointer - PAGE_SIZE;
+            updateSearchQueries({...searchQueries, from: newFromPointer});
+            return newFromPointer;
+        });
+    }
+
     return (
         <div className="items-center justify-items-center min-h-screen p-8 pb-20">
             <main className="items-center justify-items-center">
                 <h1>dogsScreen</h1>
+                <h1>from pointer: {fromPointer}</h1>
                 <form onSubmit={handleLogOut}>
                     <button type="submit">log out</button>
                 </form>
+                {dogSearchResults?.next && <button onClick={handleNextPageClick}>Next page</button>}
+                {dogSearchResults?.prev && <button onClick={handlePrevPageClick}>Previous page</button>}
                 <div className="bg-blue-400">
                     <form onSubmit={handleNewSearch} className="grid grid-cols-2 gap-4">
                         {/* multiple breeds */}
@@ -207,7 +234,7 @@ export default function dogsScreen() {
 
                         {/* amount of results (size) */}
                         <label className="text-black">Results to Return: {numDogsToReturn}</label>
-                        <input type="range" min={1} max={25} id="numReturn" name="numReturn" value={numDogsToReturn} onChange={(e) => updateNumDogsToReturn(parseInt(e.target.value))}></input>
+                        <input type="range" min={1} max={PAGE_SIZE} id="numReturn" name="numReturn" value={numDogsToReturn} onChange={(e) => updateNumDogsToReturn(parseInt(e.target.value))}></input>
                         
                         {/* from (paginating results [optional]) */}
 

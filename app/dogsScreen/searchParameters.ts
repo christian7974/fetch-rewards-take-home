@@ -5,6 +5,6 @@ interface searchParameters {
     ageMax?: number
 
     size?: number
-    from?: number
+    from?: number // which id to start at if list is larger than 25
     sort?: string
 }
