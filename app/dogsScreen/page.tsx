@@ -65,10 +65,16 @@ export default function dogsScreen() {
          * Function that fetches the dog search results (stored as a QueryResult object)
          */
         async function fetchDogsSearch() {
+            // add the parameters to the search results here
+            const params = new URLSearchParams({
+                
+            });
+            const baseURL = `${process.env.BASE_URL}/dogs/search`;
+            const url = `${baseURL}?${params.toString()}`;
             try {
-                const response = await fetch(`${process.env.BASE_URL}/dogs/search`, {
+                const response = await fetch(url, {
                     method: "GET",
-                    credentials: "include"
+                    credentials: "include",
                 });
     
                 if (response.ok) {
@@ -123,20 +129,22 @@ export default function dogsScreen() {
 
 
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <div className="items-center justify-items-center min-h-screen p-8 pb-20">
+            <main className="items-center justify-items-center">
                 <h1>dogsScreen</h1>
                 <form onSubmit={handleLogOut}>
                     <button type="submit">log out</button>
                 </form>
                 <p>{errorMessage}</p>
-                {dogs.map((dog) => {
-                    return (
-                        <div key={dog.id}>
-                            <IndividualDog {...dog} />
-                        </div>
-                    )
-                })}
+                <div className="grid grid-cols-4 gap-4">
+                    {dogs.map((dog) => {
+                        return (
+                            <div key={dog.id}>
+                                <IndividualDog {...dog} />
+                            </div>
+                        )
+                    })}
+                </div>
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
 
