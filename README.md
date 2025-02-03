@@ -1,9 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fetch Rewards Take Home Assessment
+This is the Fetch Rewards Take Home Assessment for the Frontend Developer position.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository by using this command line:
+```git clone https://github.com/christian7974/fetch-rewards-take-home.git```
+or by downloading the repository as a ZIP file. More instructions on cloning a repository can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
 
+2. If you are using your terminal, make sure to cd into that directory
+```cd path_to_cloned_repo```
+
+3. After you confirm that you are in the repository, run
+```npm i``` to install all required dependencies.
+
+4. Depending on whether you use npm, yarn, pnpm or bun, use these commands to run the server:
 ```bash
 npm run dev
 # or
@@ -14,23 +24,6 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Navigate to this url
+```http://localhost:3000/```
+and the website will be shown.
