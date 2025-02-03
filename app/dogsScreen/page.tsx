@@ -1,12 +1,12 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import IndividualDog from "../components/IndividualDog";
 
+import IndividualDog from "../components/IndividualDog";
+import { fetchBreeds, fetchDogSearch, PAGE_SIZE } from "./helperFunctions";
 export default function dogsScreen() {
 
     // Const value to represent the maximum number of dogs to be shown
-    const PAGE_SIZE = 12;
 
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState("");
@@ -47,28 +47,20 @@ export default function dogsScreen() {
         router.push("/");
     }
 
+
     useEffect(() => {
         /**
          * Function that fetches the dog breeds
          */
-        async function fetchBreeds() {
-            const response = await fetch(`${process.env.BASE_URL}/dogs/breeds`, {
-                method: "GET",
-                credentials: "include"
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-
+        async function getBreeds() {
+            try {
+                const data = await fetchBreeds();
                 setDogBreeds(data);
-
-
-            } else {
-                console.error("Failed to fetch breeds");
+            } catch (error) {
+                console.error("Error fetching breeds:", error);
             }
         }
-
-        fetchBreeds();
+        getBreeds();
 
     }, []);
 
@@ -77,32 +69,17 @@ export default function dogsScreen() {
         /**
          * Function that fetches the dog search results (stored as a QueryResult object)
          */
-        async function fetchDogsSearch(searchParams: searchParameters) {
-            // add the parameters to the search results here
-            if (searchParams.size === undefined) {
-                searchParams.size = PAGE_SIZE;
-            }
-            const params = new URLSearchParams(searchParams as any);
-            const baseURL = `${process.env.BASE_URL}/dogs/search`;
-            const url = `${baseURL}?${params.toString()}`;
-            try {
-                const response = await fetch(url, {
-                    method: "GET",
-                    credentials: "include",
-                });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    updateDogSearchResults(data);
-                } else {
-                    console.error("Failed to fetch breeds");
-                }
+        async function getDogSearchResults(searchQueries: searchParameters) {
+            try {
+                const data = await fetchDogSearch(searchQueries);
+                updateDogSearchResults(data);
             } catch (error) {
-                console.error("Error fetching breeds:", error);
+                console.error("Error fetching dog search results:", error);
             }
         }
 
-        fetchDogsSearch(searchQueries);
+        getDogSearchResults(searchQueries);
     }, [searchQueries]);
 
     // using the dog ids, actually get the dogs
