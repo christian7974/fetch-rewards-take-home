@@ -7,10 +7,21 @@ export default function dogsScreen() {
 
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState("");
+
+    // list of dog breeds
     const [dogBreeds, setDogBreeds] = useState([]);
-    const [dogIds, setDogIds] = useState<string[]>([]);
+
+    // the object that has the results of the search query
+    const [dogSearchResults, updateDogSearchResults] = useState<QueryResult>();
+
+    // list of dogs that resulted from the query (dogSearchResults.resultIds)
     const [dogs, setDogs] = useState<Dog[]>([]);
 
+    /**
+     * Function to log the user out of the app
+     * 
+     * @param event event from submitting the form
+     */
     async function handleLogOut(event: any) {
         event.preventDefault();
         const response = await fetch(`${process.env.BASE_URL}/auth/logout`, {
@@ -24,6 +35,9 @@ export default function dogsScreen() {
     }
 
     useEffect(() => {
+        /**
+         * Function that fetches the dog breeds
+         */
         async function fetchBreeds() {
             const response = await fetch(`${process.env.BASE_URL}/dogs/breeds`, {
                 method: "GET",
@@ -32,17 +46,24 @@ export default function dogsScreen() {
     
             if (response.ok) {
                 const data = await response.json();
+
                 setDogBreeds(data);
+                
+                
             } else {
                 console.error("Failed to fetch breeds");
             }
         }
     
         fetchBreeds();
+        
     }, []);
 
-    // generate the list of dog ids
+    // get the object from the dogs/search endpoint
     useEffect(() => {
+        /**
+         * Function that fetches the dog search results (stored as a QueryResult object)
+         */
         async function fetchDogsSearch() {
             try {
                 const response = await fetch(`${process.env.BASE_URL}/dogs/search`, {
@@ -52,7 +73,7 @@ export default function dogsScreen() {
     
                 if (response.ok) {
                     const data = await response.json();
-                    setDogIds(data.resultIds);
+                    updateDogSearchResults(data);
                 } else {
                     console.error("Failed to fetch breeds");
                 }
@@ -66,6 +87,10 @@ export default function dogsScreen() {
 
     // using the dog ids, actually get the dogs
     useEffect(() => {
+        /**
+         * Function to retrieve the list of dogs from the search
+         * @param dogIdArray array of dog ids from the search
+         */
         async function fetchDogs(dogIdArray: string[]) {
             try {
                 const response = await fetch(`${process.env.BASE_URL}/dogs`, {
@@ -74,14 +99,15 @@ export default function dogsScreen() {
                     headers: {
                         "Content-Type": "application/json"
                     },
+                    // body is the array of dog ids from the search
                     body: JSON.stringify(dogIdArray),
                 });
     
                 if (response.ok) {
                     console.log("the dogs");
                     const data = await response.json();
-                    console.log(data);
-                    setDogs(data);
+                    const sortedDogs = data.sort((a: Dog, b: Dog) => a.breed.localeCompare(b.breed));
+                    setDogs(sortedDogs);
                 } else {
                     console.error("Failed to fetch dogs");
                 }
@@ -89,11 +115,11 @@ export default function dogsScreen() {
                 console.error("Error fetching dogs:", error);
             }
         }
-    
-        if (dogIds.length > 0) {
-            fetchDogs(dogIds);
+        if (dogSearchResults && dogSearchResults.resultIds.length > 0) {
+            // pass in ONLY the dog ids from the QueryResult object
+            fetchDogs(dogSearchResults.resultIds);
         }
-    }, [dogIds]);
+    }, [dogSearchResults]);
 
 
     return (
