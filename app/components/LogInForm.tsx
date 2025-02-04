@@ -43,7 +43,7 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
                     <label htmlFor="email" className={labelStyle}>Email:</label>
                     <input id="email" name="email" placeholder="Enter your email" required value={email} className={inputStyle} onChange={(e) => setEmail(e.target.value)}></input>
 
-                    <button type="submit" className="bg-red-300 rounded-md py-2 w-1/2 text-2xl text-[#080402] hover:bg-red-500 active:bg-red-700">Press me</button>
+                    <button type="submit" className="bg-red-300 rounded-md py-2 px-2 text-2xl text-[#080402] hover:bg-red-500 active:bg-red-700">Log In</button>
                 </div>
             </form>
         </div>)

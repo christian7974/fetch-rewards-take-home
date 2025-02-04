@@ -14,7 +14,7 @@ export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToR
     const radioStyle = "h-6";
 
     return (
-        <div className="bg-blue-400 rounded p-4">
+        <div className="bg-blue-400 rounded p-4 mb-4 lg:mb-0">
             <form onSubmit={handleNewSearch} className="gap-y-4">
                 <div className="grid grid-cols-2 gap-4 p-4">
                     {/* multiple breeds */}

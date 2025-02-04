@@ -16,8 +16,8 @@ export default function DogsScreenHeader({ dogSearchResults, handleLogOut, handl
                 <button type="submit" className="bg-purple-200 rounded text-[#080402] py-2 px-4">Log Out</button>
             </form>
             <div className="flex gap-x-2">
-                {dogSearchResults?.prev && <button onClick={handlePrevPageClick} className={pageButtonStyle}>Previous Page</button>}
-                {dogSearchResults?.next && <button onClick={handleNextPageClick} className={pageButtonStyle}>Next Page</button>}
+                {<button onClick={handlePrevPageClick} className={`${pageButtonStyle} ${dogSearchResults?.prev ? "visible" : "invisible"}`}>Previous Page</button>}
+                <button onClick={handleNextPageClick} className={`${pageButtonStyle} ${dogSearchResults?.next ? "visible" : "invisible"}`}>Next Page</button>
             </div>
         </div>
     );

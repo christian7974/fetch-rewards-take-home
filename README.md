@@ -19,6 +19,7 @@ Feb 3rd - 8 hours
 - Fetch API
 - Tailwind CSS for styling components
 - [coolors.co](https://coolors.co/) to help picking color palettes
+- [Fontshare](https://www.fontshare.com/fonts/satoshi) for the Satoshi font
 
 ## Set Up Development Environment
 
