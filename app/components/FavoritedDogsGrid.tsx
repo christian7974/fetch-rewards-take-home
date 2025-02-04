@@ -24,9 +24,6 @@ export default function FavoritedDogsGrid({ favoritedDogs, handleDogClick, handl
                 })}
             </div>
             
-                
-                {/* {matchedDog && <IndividualDog {...matchedDog} />} */}
-            
         </div>
     )
 }

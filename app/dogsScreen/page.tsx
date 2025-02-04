@@ -2,14 +2,17 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import IndividualDog from "../components/IndividualDog";
 import { fetchBreeds, fetchDogById, fetchDogs, fetchDogSearch, matchDogs, PAGE_SIZE, processSearchForm } from "./helperFunctions";
 import SearchComponent from "../components/SearchComponent";
 import DogsScreenHeader from "../components/DogsScreenHeader";
 import AllDogsGrid from "../components/AllDogsGrid";
 import FavoritedDogsGrid from "../components/FavoritedDogsGrid";
+import MatchedDogModal from "../components/MatchedDogModal";
 export default function dogsScreen() {
     const router = useRouter();
+
+    // state for opening and closing the modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // list of dog breeds
     const [dogBreeds, setDogBreeds] = useState([]);
@@ -136,6 +139,7 @@ export default function dogsScreen() {
         const favoritedDogIds = favoritedDogs.map((dog) => dog.id);
         const matchedDogId = await matchDogs(favoritedDogIds);
         const favoritedDog = await fetchDogById(matchedDogId.match);
+        setIsModalOpen(true);
         updateMatchedDog(favoritedDog[0]);
     }
 
@@ -172,10 +176,12 @@ export default function dogsScreen() {
                         />}
                 </div>
 
-
+            
             </main>
+            <MatchedDogModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} matchedDog={matchedDog}/>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
             </footer>
+
         </div>
     );
 }
