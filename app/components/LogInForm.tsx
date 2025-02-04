@@ -13,11 +13,21 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
     async function handleLogin(event: any) {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
         const name = formData.get('name') as string;
         const email = formData.get('email') as string;
+
+        if (!name || !email) {
+            setErrorMessage("Please fill in all fields");
+            setLoading(true);
+            return;
+        }
+        setLoading(true);
         const response = await fetch(`${process.env.BASE_URL}/auth/login`, {
             method: "POST",
             body: JSON.stringify({ name: name, email: email }),
@@ -29,6 +39,9 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
 
         if (response.status === 200) {
             myRouter.push("/dogsScreen");
+        } else {
+            setErrorMessage("Error logging in - please double check name and email and try again.");
+            setLoading(false);
         }
     }
 
@@ -43,8 +56,9 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
                     <label htmlFor="email" className={labelStyle}>Email:</label>
                     <input id="email" name="email" placeholder="Enter your email" required value={email} className={inputStyle} onChange={(e) => setEmail(e.target.value)}></input>
 
-                    <button type="submit" className="bg-[#60281E] rounded-md py-2 px-2 text-2xl hover:bg-[#3E1A14] active:bg-[#9A4232]">Log In</button>
+                    <button type="submit" className="bg-[#60281E] rounded-md py-2 px-2 text-2xl hover:bg-[#3E1A14] active:bg-[#9A4232]">{loading ? "Logging in..." : "Log in"}</button>
                 </div>
             </form>
+            <h1 className="text-lg pb-5 text-onyx">{errorMessage}</h1>
         </div>)
 }

@@ -69,7 +69,7 @@ export async function fetchDogs(dogIdArray: string[]) {
         if (response.ok) {
             const data = await response.json();
             const sortedDogs = data.sort((a: Dog, b: Dog) => a.breed.localeCompare(b.breed));
-            return(sortedDogs);
+            return (sortedDogs);
         } else {
             console.error("Failed to fetch dogs");
         }
@@ -80,40 +80,69 @@ export async function fetchDogs(dogIdArray: string[]) {
 
 export function processSearchForm(formData: FormData) {
     const sortDataGroup = formData.get('sort_by') as string;
-        const sortOrder = formData.get('sort_order') as string;
-        var sortString = "";
-        if (sortDataGroup && sortOrder) {
-            sortString = `${sortDataGroup}:${sortOrder}`;
-        }
+    const sortOrder = formData.get('sort_order') as string;
+    var sortString = "";
+    if (sortDataGroup && sortOrder) {
+        sortString = `${sortDataGroup}:${sortOrder}`;
+    } if (sortDataGroup && !sortOrder || !sortDataGroup && sortOrder) {
+        throw new Error("Make sure to select what to sort by and the order.");
+    }
+    
+    const ageMinStr = formData.get('ageMin') as string;
+    const ageMaxStr = formData.get('ageMax') as string;
 
-        const ageMin = formData.get('ageMin') ? parseInt(formData.get('ageMin') as string) : undefined;
-        const ageMax = formData.get('ageMax') ? parseInt(formData.get('ageMax') as string) : undefined;
+    const ageMin = ageMinStr ? parseInt(ageMinStr) : undefined;
+    const ageMax = ageMaxStr ? parseInt(ageMaxStr) : undefined;
 
-        const zipCodesList = formData.get('zipCodes') as string;
-        const zipCodes = zipCodesList ? zipCodesList.split('\n') : [];
+    if (ageMinStr && ageMin !== undefined && isNaN(ageMin)) {
+        throw new Error("Minimum age must be a number");
+    }
+    
+    if (ageMaxStr && ageMax !== undefined && isNaN(ageMax)) {
+        throw new Error("Maximum age must be a number");
+    }
 
-        const breedsList = formData.getAll('breed') as string[];
-        const size = parseInt(formData.get('numReturn') as string);
-        const searchParams: searchParameters = {};
-        if (ageMin !== undefined) {
-            searchParams.ageMin = ageMin;
+    if (ageMin && ageMax && ageMin > ageMax) {
+        throw new Error("Minimum age must be less than maximum age");
+    }
+
+    const zipCodesList = formData.get('zipCodes') as string;
+    const zipCodes = zipCodesList ? zipCodesList.split('\n') : [];
+
+    for (var i = 0; i < zipCodes.length; i++) {
+        if (zipCodes[i].length !== 5) {
+            throw new Error("Zip codes must be 5 digits long");
         }
-        if (ageMax !== undefined) {
-            searchParams.ageMax = ageMax;
+        for (var j = 0; j < 5; j++) {
+            if (typeof zipCodes[i][j] !== 'number') {
+                throw new Error("Zip codes must only contain numbers");
+            }
         }
-        if (size !== undefined) {
-            searchParams.size = size;
-        }
-        if (breedsList.length > 0) {
-            searchParams.breeds = breedsList;
-        }
-        if (sortString !== "") {
-            searchParams.sort = sortString;
-        }
-        if (zipCodes.length > 0) {
-            searchParams.zipCodes = zipCodes;
-        }
-        return searchParams;    
+    }
+
+    const breedsList = formData.getAll('breed') as string[];
+    const size = parseInt(formData.get('numReturn') as string);
+    const searchParams: searchParameters = {};
+    if (ageMin !== undefined) {
+        searchParams.ageMin = ageMin;
+    }
+    if (ageMax !== undefined) {
+        searchParams.ageMax = ageMax;
+    }
+    if (size !== undefined) {
+        searchParams.size = size;
+    }
+    if (breedsList.length > 0) {
+        searchParams.breeds = breedsList;
+    }
+    if (sortString !== "") {
+        searchParams.sort = sortString;
+    }
+    if (zipCodes.length > 0) {
+        searchParams.zipCodes = zipCodes;
+    }
+    
+    return searchParams;
 }
 
 export async function matchDogs(favoritedDogIds: string[]) {

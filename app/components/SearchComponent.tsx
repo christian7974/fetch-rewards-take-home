@@ -4,10 +4,11 @@ interface SearchComponentProps {
     handleNewSearch: (e: React.FormEvent<HTMLFormElement>) => void,
     dogBreeds: string[],
     numDogsToReturn: number,
-    updateNumDogsToReturn: (num: number) => void
+    updateNumDogsToReturn: (num: number) => void,
+    errorMessage: string | undefined
 }
 
-export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToReturn, updateNumDogsToReturn }: SearchComponentProps) {
+export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToReturn, updateNumDogsToReturn, errorMessage }: SearchComponentProps) {
 
     const labelStyle = "text-onyx text-lg pr-4";
     const inputStyle = "text-onyx text-xl";
@@ -74,7 +75,8 @@ export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToR
                         </div>
                     </div>
                 </div>
-                <button type="submit" className="bg-[#b45918] hover:bg-[#7E3E11] active:bg-[#A25016] rounded py-2 px-4">Search</button>                 
+                <button type="submit" className="bg-[#b45918] hover:bg-[#7E3E11] active:bg-[#A25016] rounded py-2 px-4">Search</button>
             </form>
+            <h1 className="w-full text-center text-red-600 text-lg">{errorMessage}</h1>
         </div>)
 }

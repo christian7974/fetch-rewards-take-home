@@ -11,6 +11,8 @@ import MatchedDogModal from "../components/MatchedDogModal";
 export default function dogsScreen() {
     const router = useRouter();
 
+    const [alertMessage, updateAlertMessage] = useState(undefined);
+
     // state for opening and closing the modal
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -101,9 +103,13 @@ export default function dogsScreen() {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
         updateFromPointer(0); // when we do a new search, reset the from pointer
-        const searchParams = processSearchForm(formData);
-        updateSearchQueries(searchParams);
-
+        try {
+            const searchParams = processSearchForm(formData);
+            updateSearchQueries(searchParams);
+            updateAlertMessage(undefined);
+        } catch (error: any) {
+            updateAlertMessage(error.message);
+        }
 
     }
 
@@ -158,6 +164,7 @@ export default function dogsScreen() {
                         dogBreeds={dogBreeds}
                         numDogsToReturn={numDogsToReturn}
                         updateNumDogsToReturn={updateNumDogsToReturn}
+                        errorMessage={alertMessage}
                     />
 
                     <AllDogsGrid
