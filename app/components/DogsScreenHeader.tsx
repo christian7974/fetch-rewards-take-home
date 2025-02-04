@@ -13,7 +13,7 @@ export default function DogsScreenHeader({ dogSearchResults, handleLogOut, handl
             <h1 className="text-3xl pb-5">Welcome, Let's Begin!</h1>
             <h2 className="text-2xl text-center">Start favoriting some dogs by clicking on them to get started!</h2>
             <form onSubmit={handleLogOut}>
-                <button type="submit" className="bg-[#bbf7d0] hover:bg-[#7FF0A7] active:bg-[#B6F6CD] rounded text-[#080402] py-2 px-4">Log Out</button>
+                <button type="submit" className="bg-[#bbf7d0] hover:bg-[#7FF0A7] active:bg-[#B6F6CD] rounded text-onyx py-2 px-4">Log Out</button>
             </form>
             <div className="flex gap-x-2">
                 {<button onClick={handlePrevPageClick} className={`${pageButtonStyle} ${dogSearchResults?.prev ? "visible" : "invisible"}`}>Previous Page</button>}
