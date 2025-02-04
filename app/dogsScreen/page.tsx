@@ -6,6 +6,8 @@ import IndividualDog from "../components/IndividualDog";
 import { fetchBreeds, fetchDogById, fetchDogs, fetchDogSearch, matchDogs, PAGE_SIZE, processSearchForm } from "./helperFunctions";
 import SearchComponent from "../components/SearchComponent";
 import DogsScreenHeader from "../components/DogsScreenHeader";
+import AllDogsGrid from "../components/AllDogsGrid";
+import FavoritedDogsGrid from "../components/FavoritedDogsGrid";
 export default function dogsScreen() {
     const router = useRouter();
 
@@ -130,7 +132,7 @@ export default function dogsScreen() {
         updateFavoritedDogs([...favoritedDogs, selectedDog]);
     }
 
-    async function handleFavoritedClick() {
+    async function handleGetMatchClick() {
         const favoritedDogIds = favoritedDogs.map((dog) => dog.id);
         const matchedDogId = await matchDogs(favoritedDogIds);
         const favoritedDog = await fetchDogById(matchedDogId.match);
@@ -141,10 +143,10 @@ export default function dogsScreen() {
         <div className="items-center justify-items-center min-h-screen p-8 pb-20">
             <main className="items-center justify-items-center">
                 <DogsScreenHeader
-                dogSearchResults={dogSearchResults}
-                handleLogOut={handleLogOut}
-                handleNextPageClick={handleNextPageClick}
-                handlePrevPageClick={handlePrevPageClick}
+                    dogSearchResults={dogSearchResults}
+                    handleLogOut={handleLogOut}
+                    handleNextPageClick={handleNextPageClick}
+                    handlePrevPageClick={handlePrevPageClick}
                 />
 
                 <SearchComponent
@@ -154,28 +156,22 @@ export default function dogsScreen() {
                     updateNumDogsToReturn={updateNumDogsToReturn}
                 />
 
-                <div className="grid grid-cols-4 gap-4 bg-green-200">
-                    {dogs.map((dog) => {
-                        return (
-                            <div key={dog.id} onClick={() => handleDogClick(dog)}>
-                                <IndividualDog {...dog} />
-                            </div>
-                        )
-                    })}
-                </div>
+                <AllDogsGrid
+                    dogs={dogs}
+                    handleDogClick={handleDogClick}
+                />
 
-                <div className="grid grid-cols-4 gap-4 bg-purple-200">
-                    {favoritedDogs.map((dog) => {
-                        return (
-                            <div key={dog.id} onClick={() => handleDogClick(dog)}>
-                                <IndividualDog {...dog} />
-                            </div>
-                        )
-                    })}
-                </div>
-                {favoritedDogs.length > 0 && <button onClick={() => handleFavoritedClick()}>Get Match</button>}
+                <FavoritedDogsGrid
+                    favoritedDogs={favoritedDogs}
+                    handleDogClick={handleDogClick}
+                    handleGetMatchClick={handleGetMatchClick}
+                    matchedDog={matchedDog}
+                />
 
-                {matchedDog && <IndividualDog {...matchedDog} />}
+
+                {/* {favoritedDogs.length > 0 && <button onClick={() => handleGetMatchClick()}>Get Match</button>}
+
+                {matchedDog && <IndividualDog {...matchedDog} />} */}
 
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
