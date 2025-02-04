@@ -1,3 +1,6 @@
+/**
+ * Dog interface to be used in the app
+ */
 interface Dog {
     id: string
     img: string

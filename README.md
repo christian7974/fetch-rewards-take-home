@@ -16,8 +16,8 @@ Access the website [here](https://fetch-rewards-take-home-eight.vercel.app).
 Feb 3rd - 8 hours
 
 ## Technologies Used
-- Next.js with TypeScript
-- APIs given to me by Fetch Rewards
+- Next.js with TypeScript (Framework/language that I am the most comfortable with and one that I have used before)
+- APIs provided to me by Fetch Rewards
 - Fetch API
 - Tailwind CSS for styling components
 - [coolors.co](https://coolors.co/) to help picking color palettes
@@ -58,6 +58,7 @@ and the website will be shown.
 - Used a dark background with light dialogues/textboxes to help the contrast. Used dark text within the light components to make it easier to read.
 - When designing buttons, would add 3 states (non-active, hover, active) to help the user see when they are clicking on a button or hovering over it, helping with accessibility and overall website appearance. Opted for a darker color on hover, lighter color on active state.
 - I used error messages instead of alerts as I feel like too many alerts can hinder the user experience if they keep seeing alerts and having to close them. Whereas with messages, they do not have to close them and they can still see what is wrong.
+- One thing that made designing this project a lot easier was that I started designing on smaller devices, and then scaled up to larger devices (as that is also how Tailwind was developed to work as). This made making the web app responsive a lot easier than starting large and working smaller like I have done on my previous projects.
 
 ## Challenges I Came Across
 - Using the APIs was difficult at first, however using the fetch documentation online helped, especially how to pass bodies in POST methods.

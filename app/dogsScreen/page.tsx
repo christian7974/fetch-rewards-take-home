@@ -32,7 +32,7 @@ export default function dogsScreen() {
     const [matchedDog, updateMatchedDog] = useState<Dog>();
 
     // object that holds search queries object
-    const [searchQueries, updateSearchQueries] = useState<searchParameters>({});
+    const [searchQueries, updateSearchQueries] = useState<SearchParameters>({});
 
     const [numDogsToReturn, updateNumDogsToReturn] = useState(PAGE_SIZE);
 
@@ -71,7 +71,7 @@ export default function dogsScreen() {
 
     // get the object from the dogs/search endpoint
     useEffect(() => {
-        async function getDogSearchResults(searchQueries: searchParameters) {
+        async function getDogSearchResults(searchQueries: SearchParameters) {
             try {
                 const data = await fetchDogSearch(searchQueries);
                 updateDogSearchResults(data);

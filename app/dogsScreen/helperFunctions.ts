@@ -2,7 +2,7 @@
 export const PAGE_SIZE = 12;
 
 /**
- * 
+ * Method to return every dog breed in the database
  * @returns list of dog breeds
  */
 export async function fetchBreeds() {
@@ -25,7 +25,7 @@ export async function fetchBreeds() {
 /**
 * Function that fetches the dog search results (stored as a QueryResult object)
 */
-export async function fetchDogSearch(searchParams: searchParameters) {
+export async function fetchDogSearch(searchParams: SearchParameters) {
     // add the parameters to the search results here
     if (searchParams.size === undefined) {
         searchParams.size = PAGE_SIZE;
@@ -78,6 +78,11 @@ export async function fetchDogs(dogIdArray: string[]) {
     }
 }
 
+/**
+ * 
+ * @param formData the data from the search form
+ * @returns an object containing the search parameters and their values to be used in the search
+ */
 export function processSearchForm(formData: FormData) {
     const sortDataGroup = formData.get('sort_by') as string;
     const sortOrder = formData.get('sort_order') as string;
@@ -122,7 +127,7 @@ export function processSearchForm(formData: FormData) {
 
     const breedsList = formData.getAll('breed') as string[];
     const size = parseInt(formData.get('numReturn') as string);
-    const searchParams: searchParameters = {};
+    const searchParams: SearchParameters = {};
     if (ageMin !== undefined) {
         searchParams.ageMin = ageMin;
     }
@@ -145,6 +150,11 @@ export function processSearchForm(formData: FormData) {
     return searchParams;
 }
 
+/**
+ * 
+ * @param favoritedDogIds the list of dog ids that the user has favorited
+ * @returns the matched dog id as a string
+ */
 export async function matchDogs(favoritedDogIds: string[]) {
     const response = await fetch(`${process.env.BASE_URL}/dogs/match`, {
         method: "POST",
@@ -163,6 +173,11 @@ export async function matchDogs(favoritedDogIds: string[]) {
     }
 }
 
+/**
+ * Utility function to retrieve a single dog by its id
+ * @param dogId the dogId to be fetched 
+ * @returns the result of the API to be used as a Dog object
+ */
 export async function fetchDogById(dogId: string) {
     const response = await fetch(`${process.env.BASE_URL}/dogs`, {
         method: "POST",
