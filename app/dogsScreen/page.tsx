@@ -3,14 +3,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import IndividualDog from "../components/IndividualDog";
-import { fetchBreeds, fetchDogs, fetchDogSearch, PAGE_SIZE, processSearchForm } from "./helperFunctions";
+import { fetchBreeds, fetchDogById, fetchDogs, fetchDogSearch, matchDogs, PAGE_SIZE, processSearchForm } from "./helperFunctions";
 import SearchComponent from "../components/SearchComponent";
+import DogsScreenHeader from "../components/DogsScreenHeader";
 export default function dogsScreen() {
-
-    // Const value to represent the maximum number of dogs to be shown
-
     const router = useRouter();
-    const [errorMessage, setErrorMessage] = useState("");
 
     // list of dog breeds
     const [dogBreeds, setDogBreeds] = useState([]);
@@ -135,42 +132,20 @@ export default function dogsScreen() {
 
     async function handleFavoritedClick() {
         const favoritedDogIds = favoritedDogs.map((dog) => dog.id);
-        const matchedDogResponse = await fetch(`${process.env.BASE_URL}/dogs/match`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(favoritedDogIds),
-        });
-        if (matchedDogResponse.ok) {
-            const matchedDogId = await matchedDogResponse.json();
-            const response = await fetch(`${process.env.BASE_URL}/dogs`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                // body is the array of dog ids from the search
-                body: JSON.stringify([matchedDogId.match]),
-            });
-            if (response.ok) {
-                const favoritedDog = await response.json();
-                updateMatchedDog(favoritedDog[0]);
-            }
-        }
+        const matchedDogId = await matchDogs(favoritedDogIds);
+        const favoritedDog = await fetchDogById(matchedDogId.match);
+        updateMatchedDog(favoritedDog[0]);
     }
 
     return (
         <div className="items-center justify-items-center min-h-screen p-8 pb-20">
             <main className="items-center justify-items-center">
-                <h1>dogsScreen</h1>
-                <h1>from pointer: {fromPointer}</h1>
-                <form onSubmit={handleLogOut}>
-                    <button type="submit">log out</button>
-                </form>
-                {dogSearchResults?.next && <button onClick={handleNextPageClick}>Next page</button>}
-                {dogSearchResults?.prev && <button onClick={handlePrevPageClick}>Previous page</button>}
+                <DogsScreenHeader
+                dogSearchResults={dogSearchResults}
+                handleLogOut={handleLogOut}
+                handleNextPageClick={handleNextPageClick}
+                handlePrevPageClick={handlePrevPageClick}
+                />
 
                 <SearchComponent
                     handleNewSearch={handleNewSearch}

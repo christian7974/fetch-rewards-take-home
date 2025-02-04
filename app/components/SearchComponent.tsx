@@ -34,7 +34,7 @@ export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToR
             <input className="text-black" id="ageMax" name="ageMax"></input>
 
             {/* amount of results (size) */}
-            <label className="text-black">Results to Return: {numDogsToReturn}</label>
+            <label className="text-black">Results Per Page: {numDogsToReturn}</label>
             <input type="range" min={1} max={PAGE_SIZE} id="numReturn" name="numReturn" value={numDogsToReturn} onChange={(e) => updateNumDogsToReturn(parseInt(e.target.value))}></input>
 
             {/* from (paginating results [optional]) */}

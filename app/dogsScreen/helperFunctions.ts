@@ -1,3 +1,4 @@
+// Const value to represent the maximum number of dogs to be shown
 export const PAGE_SIZE = 12;
 
 /**
@@ -113,4 +114,38 @@ export function processSearchForm(formData: FormData) {
             searchParams.zipCodes = zipCodes;
         }
         return searchParams;    
+}
+
+export async function matchDogs(favoritedDogIds: string[]) {
+    const response = await fetch(`${process.env.BASE_URL}/dogs/match`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(favoritedDogIds),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    } else {
+        console.error("Failed to match dogs");
+    }
+}
+
+export async function fetchDogById(dogId: string) {
+    const response = await fetch(`${process.env.BASE_URL}/dogs`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        // body is the array of dog ids from the search
+        body: JSON.stringify([dogId]),
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
 }
