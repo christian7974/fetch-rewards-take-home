@@ -9,12 +9,12 @@ interface SearchComponentProps {
 
 export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToReturn, updateNumDogsToReturn }: SearchComponentProps) {
 
-    const labelStyle = "text-[#080402] text-lg pr-4";
-    const inputStyle = "text-[#080402] text-xl";
+    const labelStyle = "text-onyx text-lg pr-4";
+    const inputStyle = "text-onyx text-xl";
     const radioStyle = "h-6";
 
     return (
-        <div className="bg-blue-400 rounded p-4 mb-4 lg:mb-0">
+        <div className="bg-[#B0DAE8] rounded p-4 mb-4 lg:mb-0">
             <form onSubmit={handleNewSearch} className="gap-y-4">
                 <div className="grid grid-cols-2 gap-4 p-4">
                     {/* multiple breeds */}
@@ -74,7 +74,7 @@ export default function SearchComponent({ handleNewSearch, dogBreeds, numDogsToR
                         </div>
                     </div>
                 </div>
-                <button type="submit" className="bg-purple-200 hover:bg-purple-300 active:bg-purple-400 rounded text-[#080402] py-2 px-4">Search</button>                 
+                <button type="submit" className="bg-[#b45918] hover:bg-[#7E3E11] active:bg-[#A25016] rounded py-2 px-4">Search</button>                 
             </form>
         </div>)
 }

@@ -8,8 +8,8 @@ interface LoginFormProps {
 
 export default function LogInForm({ myRouter}: LoginFormProps) {
 
-    const labelStyle = "text-2xl"
-    const inputStyle = "text-[#080402] rounded-md h-10 text-lg px-2"
+    const labelStyle = "text-2xl text-onyx"
+    const inputStyle = "text-onyx rounded-md h-10 text-lg px-2"
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -33,8 +33,8 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
     }
 
     return (
-        <div className="bg-[#77685D] p-8 rounded-md">
-            <h1 className="text-3xl pb-5">Log in</h1>
+        <div className="bg-[#D0B8A8] p-8 rounded-md">
+            <h1 className="text-3xl pb-5 text-onyx">Log in</h1>
             <form onSubmit={handleLogin}>
                 <div className="flex flex-col gap-4 items-center">
                     <label htmlFor="name" className={labelStyle}>Name:</label>
@@ -43,7 +43,7 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
                     <label htmlFor="email" className={labelStyle}>Email:</label>
                     <input id="email" name="email" placeholder="Enter your email" required value={email} className={inputStyle} onChange={(e) => setEmail(e.target.value)}></input>
 
-                    <button type="submit" className="bg-red-300 rounded-md py-2 px-2 text-2xl text-[#080402] hover:bg-red-500 active:bg-red-700">Log In</button>
+                    <button type="submit" className="bg-[#60281E] rounded-md py-2 px-2 text-2xl hover:bg-[#3E1A14] active:bg-[#9A4232]">Log In</button>
                 </div>
             </form>
         </div>)

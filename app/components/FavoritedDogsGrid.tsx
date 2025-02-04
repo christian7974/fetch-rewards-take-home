@@ -13,7 +13,7 @@ export default function FavoritedDogsGrid({ favoritedDogs, handleDogClick, handl
             {favoritedDogs.length > 0 &&
                 <button
                     onClick={() => handleGetMatchClick()}
-                    className="bg-purple-200 rounded text-[#080402] py-2 px-4">Get Match</button>}
+                    className="bg-[#bbf7d0] hover:bg-[#7FF0A7] active:bg-[#B6F6CD] rounded text-[#080402] py-2 px-4">Get Match</button>}
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 bg-pink-200 px-4 py-2 text-center rounded">
                 {favoritedDogs.map((dog) => {
                     return (

@@ -52,6 +52,8 @@ and the website will be shown.
 - Display the Matched Dog within a modal, as the DogsScreen page was getting crammed and to get the user's attention that there is a match.
 - Made sure the base URL is located within an .env file since to prevent it from being used from unauthorized people.
 - Tried breaking down the pages into smaller, more manageable components so that the main page file is leaner.
+- Used a dark background with light dialogues/textboxes to help the contrast. Used dark text within the light components to make it easier to read.
+- When designing buttons, would add 3 states (non-active, hover, active) to help the user see when they are clicking on a button or hovering over it, helping with accessibility and overall website appearance. Opted for a darker color on hover, lighter color on active state.
 
 ## Challenges I Came Across
 - Using the APIs was difficult at first, however using the fetch documentation online helped, especially how to pass bodies in POST methods
