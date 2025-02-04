@@ -7,7 +7,7 @@ interface AllDogsGridProps {
 
 export default function AllDogsGrid({dogs, handleDogClick}: AllDogsGridProps) {
     return (
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 bg-green-200 px-4 py-2 text-center">
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 bg-green-200 px-4 py-2 text-center rounded">
             {dogs.map((dog) => {
                 return (
                     <div key={dog.id} onClick={() => handleDogClick(dog)}>

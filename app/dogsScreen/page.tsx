@@ -148,7 +148,7 @@ export default function dogsScreen() {
                     handleNextPageClick={handleNextPageClick}
                     handlePrevPageClick={handlePrevPageClick}
                 />
-                <div className="xl:grid xl:grid-cols-2">
+                <div className="xl:grid xl:grid-cols-2 pb-4 gap-x-3">
                     <SearchComponent
                         handleNewSearch={handleNewSearch}
                         dogBreeds={dogBreeds}
@@ -161,12 +161,16 @@ export default function dogsScreen() {
                         handleDogClick={handleDogClick}
                     />
                 </div>
-                <FavoritedDogsGrid
-                    favoritedDogs={favoritedDogs}
-                    handleDogClick={handleDogClick}
-                    handleGetMatchClick={handleGetMatchClick}
-                    matchedDog={matchedDog}
-                />
+                <div className="text-center justify-items-center items-center gap-y-4 flex flex-col">
+                    <h2 className="text-2xl text-center">As you favorite dogs, they will appear below.</h2>
+                    {favoritedDogs.length > 0 &&
+                        <FavoritedDogsGrid
+                            favoritedDogs={favoritedDogs}
+                            handleDogClick={handleDogClick}
+                            handleGetMatchClick={handleGetMatchClick}
+                            matchedDog={matchedDog}
+                        />}
+                </div>
 
 
             </main>

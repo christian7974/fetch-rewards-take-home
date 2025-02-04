@@ -9,8 +9,12 @@ interface FavoritedDogsGridProps {
 
 export default function FavoritedDogsGrid({ favoritedDogs, handleDogClick, handleGetMatchClick, matchedDog }: FavoritedDogsGridProps) {
     return (
-        <>
-            <div className="grid grid-cols-4 gap-4 bg-pink-200">
+        <div className="gap-y-4 flex flex-col items-center justify-items-center">
+            {favoritedDogs.length > 0 && 
+                <button 
+                onClick={() => handleGetMatchClick()}
+                className="bg-purple-200 rounded text-[#080402] py-2 px-4">Get Match</button>}
+            <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 bg-pink-200 px-4 py-2 text-center rounded">
                 {favoritedDogs.map((dog) => {
                     return (
                         <div key={dog.id} onClick={() => handleDogClick(dog)}>
@@ -20,9 +24,7 @@ export default function FavoritedDogsGrid({ favoritedDogs, handleDogClick, handl
                 })}
             </div>
 
-            {favoritedDogs.length > 0 && <button onClick={() => handleGetMatchClick()}>Get Match</button>}
-
             {matchedDog && <IndividualDog {...matchedDog} />}
-        </>
+        </div>
     )
 }

@@ -28,6 +28,11 @@ bun dev
 ```http://localhost:3000/```
 and the website will be shown.
 
+## Design Choices
+- If the user clears their Favorited Dogs, then the matched dog will not be cleared.
+- I did not use a component class as I wanted to try to learn some more HTML tags (I have never used select multiple, radios or ranges in my past projects, so being able to experiment with them has been very helpful).
+- 
+
 ## Checklist
 - [x] User enters name & email
 - [x] Bring to page to see available dogs
