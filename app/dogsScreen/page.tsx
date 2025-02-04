@@ -148,19 +148,19 @@ export default function dogsScreen() {
                     handleNextPageClick={handleNextPageClick}
                     handlePrevPageClick={handlePrevPageClick}
                 />
+                <div className="xl:grid xl:grid-cols-2">
+                    <SearchComponent
+                        handleNewSearch={handleNewSearch}
+                        dogBreeds={dogBreeds}
+                        numDogsToReturn={numDogsToReturn}
+                        updateNumDogsToReturn={updateNumDogsToReturn}
+                    />
 
-                <SearchComponent
-                    handleNewSearch={handleNewSearch}
-                    dogBreeds={dogBreeds}
-                    numDogsToReturn={numDogsToReturn}
-                    updateNumDogsToReturn={updateNumDogsToReturn}
-                />
-
-                <AllDogsGrid
-                    dogs={dogs}
-                    handleDogClick={handleDogClick}
-                />
-
+                    <AllDogsGrid
+                        dogs={dogs}
+                        handleDogClick={handleDogClick}
+                    />
+                </div>
                 <FavoritedDogsGrid
                     favoritedDogs={favoritedDogs}
                     handleDogClick={handleDogClick}
@@ -171,7 +171,6 @@ export default function dogsScreen() {
 
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-
             </footer>
         </div>
     );
