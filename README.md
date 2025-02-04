@@ -14,6 +14,7 @@ Access the website [here](https://fetch-rewards-take-home-eight.vercel.app).
 
 ## Time Spent on Assessment:
 Feb 3rd - 8 hours
+Feb 4th - 2.5 hours
 
 ## Technologies Used
 - Next.js with TypeScript (Framework/language that I am the most comfortable with and one that I have used before)
