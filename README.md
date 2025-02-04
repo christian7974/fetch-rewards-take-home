@@ -31,9 +31,9 @@ and the website will be shown.
 ## Checklist
 - [x] User enters name & email
 - [x] Bring to page to see available dogs
-- [] Filtered by breed
+- [ ] Filtered by breed
 - [x] Paginated
-- [] Sorted by breed alphabetically
+- [ ] Sorted by breed alphabetically
 - [x] ALL fields except ID present
 - [x] Users can select their favorite dogs from search results
 - [x] Should generate a match based on their favorited dogs list

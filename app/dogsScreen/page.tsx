@@ -169,10 +169,6 @@ export default function dogsScreen() {
                 />
 
 
-                {/* {favoritedDogs.length > 0 && <button onClick={() => handleGetMatchClick()}>Get Match</button>}
-
-                {matchedDog && <IndividualDog {...matchedDog} />} */}
-
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
 

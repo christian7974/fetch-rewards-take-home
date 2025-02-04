@@ -7,6 +7,10 @@ interface LoginFormProps {
 
 
 export default function LogInForm({ myRouter}: LoginFormProps) {
+
+    const labelStyle = "text-2xl"
+    const inputStyle = "text-[#080402] rounded-md h-10 text-lg px-2"
+
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     async function handleLogin(event: any) {
@@ -29,15 +33,18 @@ export default function LogInForm({ myRouter}: LoginFormProps) {
     }
 
     return (
-        <>
+        <div className="bg-[#77685D] p-8 rounded-md">
+            <h1 className="text-3xl pb-5">Log in</h1>
             <form onSubmit={handleLogin}>
-                <label htmlFor="name">Name:</label>
-                <input id="name" name="name" required value={name} className="text-black" onChange={(e) => setName(e.target.value)}></input>
+                <div className="flex flex-col gap-4 items-center">
+                    <label htmlFor="name" className={labelStyle}>Name:</label>
+                    <input id="name" name="name" placeholder="Enter your name" required value={name} className={inputStyle} onChange={(e) => setName(e.target.value)}></input>
 
-                <label htmlFor="email">Email:</label>
-                <input id="email" name="email" required value={email} className="text-black" onChange={(e) => setEmail(e.target.value)}></input>
+                    <label htmlFor="email" className={labelStyle}>Email:</label>
+                    <input id="email" name="email" placeholder="Enter your email" required value={email} className={inputStyle} onChange={(e) => setEmail(e.target.value)}></input>
 
-                <button type="submit">Press me</button>
+                    <button type="submit" className="bg-red-300 rounded-md py-2 w-1/2 text-2xl text-[#080402] hover:bg-red-500 active:bg-red-700">Press me</button>
+                </div>
             </form>
-        </>)
+        </div>)
 }
