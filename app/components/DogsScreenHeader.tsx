@@ -5,15 +5,20 @@ interface DogScreenHeaderProps {
     handlePrevPageClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function DogsScreenHeader({dogSearchResults, handleLogOut, handleNextPageClick, handlePrevPageClick}: DogScreenHeaderProps) {
+export default function DogsScreenHeader({ dogSearchResults, handleLogOut, handleNextPageClick, handlePrevPageClick }: DogScreenHeaderProps) {
+    const buttonStyle = "bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded active:bg-blue-900";
+
     return (
-    <div>
-        <h1>Dogs Screen</h1>
-                <form onSubmit={handleLogOut}>
-                    <button type="submit">log out</button>
-                </form>
-                {dogSearchResults?.next && <button onClick={handleNextPageClick}>Next page</button>}
-                {dogSearchResults?.prev && <button onClick={handlePrevPageClick}>Previous page</button>}
-    </div>
+        <div className="items-center justify-items-center pb-4 flex flex-col gap-y-4">
+            <h1 className="text-3xl pb-5">Welcome, Let's Begin!</h1>
+            <h2 className="text-2xl text-center">Start by favoriting some dogs by clicking on them to get started!</h2>
+            <form onSubmit={handleLogOut}>
+                <button type="submit" className="bg-purple-200 rounded text-[#080402] py-2 px-4">Log Out</button>
+            </form>
+            <div className="flex gap-x-2">
+                {dogSearchResults?.prev && <button onClick={handlePrevPageClick} className={buttonStyle}>Previous Page</button>}
+                {dogSearchResults?.next && <button onClick={handleNextPageClick} className={buttonStyle}>Next Page</button>}
+            </div>
+        </div>
     );
 }
