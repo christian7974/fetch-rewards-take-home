@@ -92,7 +92,7 @@ export function processSearchForm(formData: FormData) {
     } if (sortDataGroup && !sortOrder || !sortDataGroup && sortOrder) {
         throw new Error("Make sure to select what to sort by and the order.");
     }
-    
+
     const ageMinStr = formData.get('ageMin') as string;
     const ageMaxStr = formData.get('ageMax') as string;
 
@@ -102,7 +102,7 @@ export function processSearchForm(formData: FormData) {
     if (ageMinStr && ageMin !== undefined && isNaN(ageMin)) {
         throw new Error("Minimum age must be a number");
     }
-    
+
     if (ageMaxStr && ageMax !== undefined && isNaN(ageMax)) {
         throw new Error("Maximum age must be a number");
     }
@@ -113,16 +113,16 @@ export function processSearchForm(formData: FormData) {
 
     const zipCodesList = formData.get('zipCodes') as string;
     const zipCodes = zipCodesList ? zipCodesList.split('\n') : [];
-
     for (var i = 0; i < zipCodes.length; i++) {
-        if (zipCodes[i].length !== 5) {
+        const zipCode = zipCodes[i].trim(); // incase the user adds a space before/after zip code
+        if (zipCode.length !== 5) {
             throw new Error("Zip codes must be 5 digits long");
         }
-        for (var j = 0; j < 5; j++) {
-            if (typeof zipCodes[i][j] !== 'number') {
-                throw new Error("Zip codes must only contain numbers");
-            }
+        const zipCodeNumber = Number(zipCode);
+        if (isNaN(zipCodeNumber)) {
+            throw new Error(`Invalid zip code: ${zipCode}`);
         }
+        
     }
 
     const breedsList = formData.getAll('breed') as string[];
@@ -146,7 +146,7 @@ export function processSearchForm(formData: FormData) {
     if (zipCodes.length > 0) {
         searchParams.zipCodes = zipCodes;
     }
-    
+
     return searchParams;
 }
 
